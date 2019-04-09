@@ -1,41 +1,49 @@
 <template>
   <div class="hello">
-    <h1 :title="'hello' + titleMsg">{{ msg }}</h1>
-    <div>
-      <span v-html="number"></span>
-      <button  v-text="text" @click="handleClick"></button>
-    </div>
+    <demo-list></demo-list>
+    <h1>toollist demo</h1>
     <input type="text" v-model="inputValue">
-    <p>{{inputValue}}</p>
+    <button @click="handleSubmit">提交</button>
+    <ul>
+      <todo-item
+        v-for="(item, index) of fullList"
+        :key="index"
+        :message="item"
+        :index="index"
+        @delete="hadleDelete"></todo-item>
+    </ul>
   </div>
 </template>
 
 <script>
-// 面向数据编程
-// 事件绑定 v-click--@click
-// 属性绑定 v-bind:---:
-// 双向数据绑定 v-model
+import TodoItem from '@/components/TodoItem'
+import Demo from '@/components/Demo'
 export default {
   name: 'HelloWorld',
+  components: {
+    'todo-item': TodoItem,
+    'demo-list': Demo
+  },
   data () {
     return {
-      msg: 'Welcome to my first application',
-      titleMsg: 'Welcome sherry',
-      number: '<span>123</span>',
-      text: 'test button',
-      inputValue: ''
+      inputValue: '',
+      fullList: []
     }
   },
   methods: {
-    handleClick: function () {
-      this.number = '456'
+    handleSubmit: function () {
+      this.fullList.push(this.inputValue)
+      this.inputValue = ''
+    },
+    hadleDelete: function (index) {
+      this.fullList.splice(index, 1)
     }
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style>
 h1, h2 {
   font-weight: normal;
 }
