@@ -5,7 +5,7 @@
         <div class="time"><span class="time-span">{{ item.date | formatTime }}</span></div>
         <div class="content" :class="{ self: item.self }">
           <img class="image" :src="item.self ? userInfo[0].img : userInfo[1].img" />
-          <div class="text">{{ item.content }}</div>
+          <div class="text" v-html="regUrl(item.content)"></div>
         </div>
       </li>
     </ul>
@@ -25,6 +25,15 @@ export default {
     message(){
       setTimeout(() => this.$refs.messageRoom.scrollTop = this.$refs.messageRoom.scrollHeight, 0)
     }
+  },
+  methods: {
+    regUrl: function(data) {
+      var regexp = /((http|https):\/\/([\w\-]+\.)+[\w\-]+(\/[\w\u4e00-\u9fa5\-\.\/?\@\%\!\&=\+\~\:\#\;\,]*)?)/ig;
+      var text = data.replace(regexp,function(url) {
+        return `<a href="${url}">${url}</a>`
+      })
+      return text
+    }
   }
 }
 </script>
@@ -34,12 +43,16 @@ export default {
     padding: 0;
   }
   .message-room {
-    height:90%;
+    height:85%;
     overflow-y: auto;
     margin:5px;
   }
   .content {
     height:36px;
+  }
+  .time {
+    font-size:12px;
+    margin: 10px auto;
   }
   .time-span {
     background-color:#fff;
@@ -52,7 +65,7 @@ export default {
   }
   .content .text{
     float:left;
-    margin: 10px 0 10px 10px;
+    margin: 0 0 10px 10px;
     padding: 6px 10px;
     font-size: 14px;
     max-width: 330px;
@@ -70,7 +83,7 @@ export default {
   }
   .self .text{
     float:right;
-    margin: 10px 10px 10px 0;
+    margin: 0px 10px 10px 0;
     background-color: green;
   }
 </style>

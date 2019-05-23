@@ -1,11 +1,11 @@
 <template>
   <div class="text">
-    <textarea ref="text" v-model="inputValue"></textarea>
+    <textarea ref="text" v-model="currentInputValue"></textarea>
     <div class="buttonGroup">
-       <button class="button" @click="sendMessage" :disabled="inputValue ===''">
+       <button class="button" @click="sendMessage" :disabled="currentInputValue ===''">
     	  发送信息
         </button>
-       <button class="button" @click="receiveMessage" :disabled="inputValue ===''">
+       <button class="button" @click="receiveMessage" :disabled="currentInputValue ===''">
     	  接受信息
       </button>
     </div>
@@ -16,17 +16,20 @@
 <script>
 export default {
   name: 'InputText',
+  props: ['inputValue'],
   data() {
     return {
-      inputValue: ''
+      currentInputValue: this.inputValue
     }
   },
   methods: {
     sendMessage: function () {
-      this.$emit('send', this.inputValue, true)
+      this.$emit('send', this.currentInputValue, true)
+      this.currentInputValue = ''
     },
     receiveMessage: function () {
-      this.$emit('send', this.inputValue, false)
+      this.$emit('send', this.currentInputValue, false)
+      this.currentInputValue = ''
     }
 	}
 }
@@ -34,7 +37,7 @@ export default {
 
 <style scoped>
 .text {
-  top:90%;
+  top:85%;
   height:15%;
   width:100%;
   background-color:#fff;
